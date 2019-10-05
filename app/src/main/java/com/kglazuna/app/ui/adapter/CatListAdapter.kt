@@ -11,15 +11,23 @@ import com.kglazuna.app.R
 import com.kglazuna.app.model.Cat
 import timber.log.Timber
 
-class CatListAdapter( private val context: Context, var catList: List<Cat>) :
+class CatListAdapter(
+    private val context: Context,
+    var catList: List<Cat>,
+    private val listener: OnCatClickListener? = null
+) :
     RecyclerView.Adapter<CatListAdapter.ViewHolder>() {
+
+    interface OnCatClickListener {
+        fun onCatSelected(position: Int)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Timber.d("onCreateViewHolder")
         val rootView = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_cat, parent, false)
 
-        return ViewHolder(rootView, context)
+        return ViewHolder(rootView, context, listener)
     }
 
     override fun getItemCount(): Int {
@@ -33,9 +41,18 @@ class CatListAdapter( private val context: Context, var catList: List<Cat>) :
         holder.bind(catList[position])
     }
 
-    class ViewHolder(itemView: View, private val context: Context) :
-        RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+        itemView: View,
+        private val context: Context,
+        private val listener: OnCatClickListener? = null
+    ) :
+        RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+
         var catImageView: ImageView = itemView.findViewById(R.id.catItemView)
+        init {
+            listener?.let { itemView.setOnClickListener(this) }
+        }
 
         fun bind(cat: Cat) {
             Timber.d("adapter binding cat")
@@ -43,6 +60,10 @@ class CatListAdapter( private val context: Context, var catList: List<Cat>) :
                 .load(cat.url)
                 .placeholder(R.drawable.ic_cat_placeholder)
                 .into(catImageView)
+        }
+
+        override fun onClick(v: View?) {
+            listener?.onCatSelected(adapterPosition)
         }
     }
 }
