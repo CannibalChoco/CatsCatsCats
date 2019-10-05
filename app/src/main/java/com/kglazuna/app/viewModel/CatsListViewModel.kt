@@ -11,5 +11,6 @@ class CatsListViewModel : ViewModel() {
 
     init {
         // TODO: get cats
+        catList.value = emptyList()
     }
 }
