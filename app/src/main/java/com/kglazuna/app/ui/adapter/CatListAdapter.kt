@@ -1,23 +1,25 @@
 package com.kglazuna.app.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kglazuna.app.R
 import com.kglazuna.app.model.Cat
 import timber.log.Timber
 
-class CatListAdapter(var catList: List<Cat>) : RecyclerView.Adapter<CatListAdapter.ViewHolder>() {
-
+class CatListAdapter( private val context: Context, var catList: List<Cat>) :
+    RecyclerView.Adapter<CatListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Timber.d("onCreateViewHolder")
         val rootView = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_cat, parent, false)
 
-        return ViewHolder(rootView)
+        return ViewHolder(rootView, context)
     }
 
     override fun getItemCount(): Int {
@@ -31,12 +33,15 @@ class CatListAdapter(var catList: List<Cat>) : RecyclerView.Adapter<CatListAdapt
         holder.bind(catList[position])
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var id: TextView = itemView.findViewById(R.id.catItemView)
+    class ViewHolder(itemView: View, private val context: Context) :
+        RecyclerView.ViewHolder(itemView) {
+        var catImageView: ImageView = itemView.findViewById(R.id.catItemView)
 
         fun bind(cat: Cat) {
             Timber.d("adapter binding cat")
-            id.text = cat.id
+            Glide.with(context)
+                .load(cat.url)
+                .into(catImageView)
         }
     }
 }

@@ -25,7 +25,7 @@ class CatsListActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this)[CatsListViewModel::class.java]
         layoutManager = GridLayoutManager(this, 2)
-        adapter = CatListAdapter(emptyList())
+        adapter = CatListAdapter(this, emptyList())
 
         catRecyclerView.layoutManager = layoutManager
         catRecyclerView.adapter = adapter
