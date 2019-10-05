@@ -2,7 +2,11 @@ package com.kglazuna.app.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kglazuna.app.model.Cat
+import com.kglazuna.app.repository.CatRepo
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class CatsListViewModel : ViewModel() {
 
@@ -10,7 +14,13 @@ class CatsListViewModel : ViewModel() {
         private set
 
     init {
-        // TODO: get cats
-        catList.value = emptyList()
+        Timber.d("init viewModel")
+    }
+
+    fun getCats() {
+        viewModelScope.launch {
+            catList.value = CatRepo.getCats2()
+            Timber.d("viewModel got cats")
+        }
     }
 }

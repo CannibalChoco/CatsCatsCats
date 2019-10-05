@@ -10,6 +10,7 @@ import com.kglazuna.app.ui.adapter.CatListAdapter
 import com.kglazuna.app.viewModel.CatsListViewModel
 import kotlinx.android.synthetic.main.activity_cats_list.*
 import kotlinx.android.synthetic.main.content_cats_list.*
+import timber.log.Timber
 
 class CatsListActivity : AppCompatActivity() {
 
@@ -30,8 +31,11 @@ class CatsListActivity : AppCompatActivity() {
         catRecyclerView.adapter = adapter
 
         viewModel.catList.observe(this, Observer { cats ->
-            // TODO: pass cats to recyclerview
+            Timber.d("activity got cat list cats")
             adapter.catList = cats
+            adapter.notifyDataSetChanged()
         })
+
+        viewModel.getCats()
     }
 }
