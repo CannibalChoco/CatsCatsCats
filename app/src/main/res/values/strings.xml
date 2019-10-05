@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Cats Cats Cats</string>
+    <string name="title_activity_cat_rating">Cat Rating</string>
 </resources>

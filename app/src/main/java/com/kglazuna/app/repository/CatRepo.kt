@@ -8,6 +8,8 @@ import timber.log.Timber
 object CatRepo {
 
     private val catApi = CatApi.create()
+    var catList: List<Cat> = emptyList()
+        private set
 
     suspend fun getCats() : List<Cat> {
         val apiResponse = catApi.getCats(BuildConfig.CAT_API_KEY,40)
@@ -17,6 +19,7 @@ object CatRepo {
             is List<Cat> -> {
                 Timber.d("got cats: $catList")
                 Timber.d("CatRepo: Cat count: ${catList.size}")
+                this@CatRepo.catList = catList
                 catList
             }
             else -> {

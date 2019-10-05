@@ -1,5 +1,6 @@
 package com.kglazuna.app.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -43,5 +44,8 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
     override fun onCatSelected(position: Int) {
         Timber.d("kitty selected")
         Snackbar.make(catsListLayout, "Kitty selected", Snackbar.LENGTH_SHORT).show()
+        val intent = Intent(this, CatRatingActivity::class.java)
+        intent.putExtra("position", position)
+        startActivity(intent)
     }
 }
