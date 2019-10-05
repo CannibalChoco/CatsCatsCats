@@ -41,6 +41,7 @@ class CatListAdapter( private val context: Context, var catList: List<Cat>) :
             Timber.d("adapter binding cat")
             Glide.with(context)
                 .load(cat.url)
+                .placeholder(R.drawable.ic_cat_placeholder)
                 .into(catImageView)
         }
     }
