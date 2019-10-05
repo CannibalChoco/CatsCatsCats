@@ -19,7 +19,7 @@ class CatsListViewModel : ViewModel() {
 
     fun getCats() {
         viewModelScope.launch {
-            catList.value = CatRepo.getCats2()
+            catList.value = CatRepo.getCats()
             Timber.d("viewModel got cats")
         }
     }

@@ -9,7 +9,7 @@ object CatRepo {
 
     private val catApi = CatApi.create()
 
-    suspend fun getCats2() : List<Cat> {
+    suspend fun getCats() : List<Cat> {
         val apiResponse = catApi.getCats(BuildConfig.CAT_API_KEY,40)
         Timber.d("response: $apiResponse")
         val catList = apiResponse.body()
