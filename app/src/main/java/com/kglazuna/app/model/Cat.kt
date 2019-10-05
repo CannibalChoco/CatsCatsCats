@@ -1,4 +1,3 @@
 package com.kglazuna.app.model
 
-class Cat {
-}
+data class Cat(val id: String, val url: String)
