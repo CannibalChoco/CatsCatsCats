@@ -20,10 +20,7 @@ class CatRatingViewModel(val catRepo: CatRepo) : ViewModel() {
         catList = catRepo.catList
     }
 
-    fun sendVote(catPosition: Int, value: Int) {
-        val cat = catList[catPosition]
-        val vote = Vote(cat.id, value)
-
+    fun sendVote(vote: Vote) {
         viewModelScope.launch {
             Timber.d("sending vote")
             when (catRepo.sendVote(vote)) {
@@ -37,5 +34,10 @@ class CatRatingViewModel(val catRepo: CatRepo) : ViewModel() {
                 }
             }
         }
+    }
+
+    fun createVote(catPosition: Int, value: Int): Vote {
+        val cat = catList[catPosition]
+        return Vote(cat.id, value)
     }
 }

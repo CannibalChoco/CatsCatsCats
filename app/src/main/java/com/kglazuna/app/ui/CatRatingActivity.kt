@@ -64,9 +64,10 @@ class CatRatingActivity : AppCompatActivity() {
         connectionStateMonitor.unregister(this)
     }
 
-    private fun tryVote(vote: Int) {
+    private fun tryVote(value: Int) {
         if (connectionStateMonitor.isConnected) {
-            viewModel.sendVote(viewPager.currentItem, vote)
+            val vote = viewModel.createVote(viewPager.currentItem, value)
+            viewModel.sendVote(vote)
         } else {
             showSnackbar(catRatingLayout, getString(R.string.not_connected_cant_send_vote))
         }
