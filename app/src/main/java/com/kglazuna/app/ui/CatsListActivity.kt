@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.kglazuna.app.ConnectionStateMonitor
 import com.kglazuna.app.R
 import com.kglazuna.app.ui.adapter.CatListAdapter
+import com.kglazuna.app.util.showSnackbar
 import com.kglazuna.app.viewModel.CatsListViewModel
 import kotlinx.android.synthetic.main.activity_cats_list.*
 import kotlinx.android.synthetic.main.content_cats_list.*
@@ -64,7 +64,7 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
             if (isConnected) {
                 viewModel.getCats()
             } else {
-                showSnackbar("No network connection")
+                showSnackbar(catsListLayout,"No network connection")
             }
         }
     }
@@ -81,14 +81,9 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
 
     override fun onCatSelected(position: Int) {
         Timber.d("kitty selected")
-        Snackbar.make(catsListLayout, "Kitty selected", Snackbar.LENGTH_SHORT).show()
         val intent = Intent(this, CatRatingActivity::class.java)
         intent.putExtra("position", position)
         startActivity(intent)
-    }
-
-    fun showSnackbar(message: String) {
-        Snackbar.make(catsListLayout, message, Snackbar.LENGTH_SHORT).show()
     }
 
     fun showConnectivity(isConnected: Boolean) {

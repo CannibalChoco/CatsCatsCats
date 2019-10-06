@@ -10,4 +10,7 @@
     <string name="could_not_load_data">Could not load images. Check network connection and try again</string>
     <string name="retry">Retry</string>
 
+    <string name="lost_connection">Lost network connection</string>
+    <string name="regained_connection">Connected to network</string>
+
 </resources>
