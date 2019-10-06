@@ -8,6 +8,7 @@
 
     <string name="not_connected_message">No Internet connection</string>
     <string name="could_not_load_data">Could not load images. Check network connection and try again</string>
+    <string name="not_connected_cant_send_vote">No network connection. Cannot send vote</string>
     <string name="retry">Retry</string>
 
     <string name="lost_connection">Lost network connection</string>
