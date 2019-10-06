@@ -5,10 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.snackbar.Snackbar
 import com.kglazuna.app.R
 import com.kglazuna.app.model.Vote
 import com.kglazuna.app.ui.adapter.CatImagePagerAdapter
+import com.kglazuna.app.util.showSnackbar
 import com.kglazuna.app.viewModel.CatRatingViewModel
 import kotlinx.android.synthetic.main.activity_cat_rating.*
 import kotlinx.android.synthetic.main.activity_cat_rating.toolbar
@@ -50,11 +50,7 @@ class CatRatingActivity : AppCompatActivity() {
     }
 
     fun displayVotedMessage(votePosted: Boolean) = when(votePosted) {
-        true -> showSnackbar(getString(R.string.vote_success))
-        else -> showSnackbar(getString(R.string.vote_error))
-    }
-
-    fun showSnackbar(message: String) {
-        Snackbar.make(catRatingLayout, message, Snackbar.LENGTH_SHORT).show()
+        true -> showSnackbar(catRatingLayout, getString(R.string.vote_success))
+        else -> showSnackbar(catRatingLayout, getString(R.string.vote_error))
     }
 }
