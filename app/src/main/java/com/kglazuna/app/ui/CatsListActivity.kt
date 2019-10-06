@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.kglazuna.app.ConnectionStateMonitor
 import com.kglazuna.app.R
 import com.kglazuna.app.ui.adapter.CatListAdapter
 import com.kglazuna.app.viewModel.CatsListViewModel
@@ -19,6 +20,7 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
     private lateinit var viewModel: CatsListViewModel
     private lateinit var layoutManager: GridLayoutManager
     private lateinit var adapter: CatListAdapter
+    var isConnected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,24 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
         })
 
         viewModel.getCats()
+
+        ConnectionStateMonitor.INSTANCE.isConnected.observe(this, Observer {
+            when (it) {
+                true -> Timber.d("Connected")
+                else -> Timber.d("Lost connectivity")
+            }
+            isConnected = it
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ConnectionStateMonitor.INSTANCE.register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        ConnectionStateMonitor.INSTANCE.unregister(this)
     }
 
     override fun onCatSelected(position: Int) {
