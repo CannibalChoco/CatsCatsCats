@@ -30,9 +30,6 @@ object CatRepo {
                     emptyList()
                 }
             }
-        } catch (e: HttpException) {
-            Timber.d(e)
-            emptyList()
         } catch (t: Throwable) {
             Timber.d(t)
             emptyList()
@@ -46,9 +43,6 @@ object CatRepo {
                 200 -> true
                 else -> false
             }
-        } catch (e: HttpException) {
-            Timber.d(e)
-            false
         } catch (t: Throwable) {
             Timber.d(t)
             false
