@@ -1,11 +1,11 @@
 package com.kglazuna.app.viewModel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kglazuna.app.model.Cat
 import com.kglazuna.app.model.Vote
 import com.kglazuna.app.repository.CatRepo
+import com.kglazuna.app.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -13,7 +13,7 @@ class CatRatingViewModel : ViewModel() {
 
     var catList: List<Cat> = emptyList()
         private set
-    val onVotePosted = MutableLiveData<Boolean>()
+    val onVotePosted = SingleLiveEvent<Boolean>()
 
     init {
         Timber.d("init viewModel")
