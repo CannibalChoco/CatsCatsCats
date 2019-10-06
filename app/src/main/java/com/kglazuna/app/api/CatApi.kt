@@ -3,7 +3,6 @@ package com.kglazuna.app.api
 import com.kglazuna.app.model.Cat
 import com.kglazuna.app.model.Vote
 import com.kglazuna.app.model.VoteResponse
-import okhttp3.HttpUrl
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -14,26 +13,24 @@ import retrofit2.http.Query
 
 interface CatApi {
 
-    @GET("/v1/images/search?")
+    @GET("/images/search?")
     suspend fun getCats(
         @Query("api_key") apiKey: String,
         @Query("limit") limit: Int
     ): Response<List<Cat>>
 
-    @POST("v1/votes")
+    @POST("/votes")
     suspend fun sendVote(
         @Query("api_key") apiKey: String,
         @Body vote: Vote
     ): Response<VoteResponse>
 
     companion object {
-        private const val BASE_URL = "https://api.thecatapi.com"
+        private const val BASE_URL = "https://api.thecatapi.com/v1"
 
-        fun create(): CatApi = create(HttpUrl.parse(BASE_URL)!!)
-
-        private fun create(httpUrl: HttpUrl): CatApi {
+        fun create(): CatApi {
             return Retrofit.Builder()
-                .baseUrl(httpUrl)
+                .baseUrl(BASE_URL)
                 .client(buildClientWithLogger())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
