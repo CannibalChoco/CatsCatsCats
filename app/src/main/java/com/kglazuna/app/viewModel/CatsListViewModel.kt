@@ -18,9 +18,11 @@ class CatsListViewModel : ViewModel() {
     }
 
     fun getCats() {
-        viewModelScope.launch {
-            catList.value = CatRepo.getCats()
-            Timber.d("viewModel got cats")
+        if (catList.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                catList.value = CatRepo.getCats()
+                Timber.d("viewModel got cats")
+            }
         }
     }
 }
