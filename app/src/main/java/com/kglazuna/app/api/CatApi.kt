@@ -13,20 +13,20 @@ import retrofit2.http.Query
 
 interface CatApi {
 
-    @GET("/images/search?")
+    @GET("v1/images/search?")
     suspend fun getCats(
         @Query("api_key") apiKey: String,
         @Query("limit") limit: Int
     ): Response<List<Cat>>
 
-    @POST("/votes")
+    @POST("v1/votes")
     suspend fun sendVote(
         @Query("api_key") apiKey: String,
         @Body vote: Vote
     ): Response<VoteResponse>
 
     companion object {
-        private const val BASE_URL = "https://api.thecatapi.com/v1"
+        private const val BASE_URL = "https://api.thecatapi.com"
 
         fun create(): CatApi {
             return Retrofit.Builder()
