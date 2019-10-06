@@ -14,4 +14,7 @@
     <string name="lost_connection">Lost network connection</string>
     <string name="regained_connection">Connected to network</string>
 
+    <string name="vote_up">Vote UP</string>
+    <string name="vote_down">Vote DOWN</string>
+
 </resources>
