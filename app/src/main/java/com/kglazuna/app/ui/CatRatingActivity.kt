@@ -2,10 +2,10 @@ package com.kglazuna.app.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
+import androidx.viewpager.widget.ViewPager
 import com.kglazuna.app.R
+import com.kglazuna.app.ui.adapter.CatImagePagerAdapter
 import com.kglazuna.app.viewModel.CatRatingViewModel
 import kotlinx.android.synthetic.main.activity_cat_rating.*
 import kotlinx.android.synthetic.main.content_cat_rating.*
@@ -14,6 +14,8 @@ import timber.log.Timber
 class CatRatingActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CatRatingViewModel
+    private lateinit var viewPager: ViewPager
+    private lateinit var pagerAdapter: CatImagePagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,14 +26,10 @@ class CatRatingActivity : AppCompatActivity() {
         val catPosition = intent.getIntExtra("position", 0)
         Timber.d("cat position: $catPosition")
 
-        viewModel.selectedCat.observe(this, Observer { cat ->
-            Glide.with(this)
-                .load(cat.url)
-                .placeholder(R.drawable.ic_cat_placeholder)
-                .into(catImageView)
-        })
-
-        viewModel.selectCat(catPosition)
+        viewPager = catViewPager
+        pagerAdapter = CatImagePagerAdapter(this, viewModel.catList)
+        viewPager.adapter = pagerAdapter
+        viewPager.currentItem = catPosition
 
     }
 

@@ -8,8 +8,10 @@ import timber.log.Timber
 
 class CatRatingViewModel : ViewModel() {
 
-    private var catList: List<Cat> = emptyList()
-//    var currentCatPosition: Int = 0
+    var catList: List<Cat> = emptyList()
+        private set
+
+    //    var currentCatPosition: Int = 0
     val selectedCat = MutableLiveData<Cat>()
 
     init {
@@ -17,7 +19,7 @@ class CatRatingViewModel : ViewModel() {
         catList = CatRepo.catList
     }
 
-    fun selectCat(position: Int){
+    fun selectCat(position: Int) {
         selectedCat.value = catList[position]
     }
 }
