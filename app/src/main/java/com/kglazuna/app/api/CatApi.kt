@@ -3,7 +3,6 @@ package com.kglazuna.app.api
 import com.kglazuna.app.model.Cat
 import com.kglazuna.app.model.Vote
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -34,7 +33,7 @@ interface CatApi {
         private fun create(httpUrl: HttpUrl): CatApi {
             return Retrofit.Builder()
                 .baseUrl(httpUrl)
-                .client(OkHttpClient())
+                .client(buildClientWithLogger())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create(CatApi::class.java)
