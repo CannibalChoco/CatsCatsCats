@@ -3,6 +3,7 @@ package com.kglazuna.app.repository
 import com.kglazuna.app.BuildConfig
 import com.kglazuna.app.api.CatApi
 import com.kglazuna.app.model.Cat
+import com.kglazuna.app.model.Vote
 import timber.log.Timber
 
 object CatRepo {
@@ -27,5 +28,9 @@ object CatRepo {
                 emptyList()
             }
         }
+    }
+
+    suspend fun sendVote(vote: Vote) {
+        catApi.sendVote(BuildConfig.CAT_API_KEY, vote)
     }
 }
