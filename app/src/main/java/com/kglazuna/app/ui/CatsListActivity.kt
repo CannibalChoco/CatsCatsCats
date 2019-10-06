@@ -2,6 +2,8 @@ package com.kglazuna.app.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -38,6 +40,12 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
             Timber.d("activity got cat list cats")
             adapter.catList = cats
             adapter.notifyDataSetChanged()
+
+            if(cats.isEmpty() && !isConnected) {
+                showCouldNotLoadData()
+            } else {
+                showLoadedOnRetry()
+            }
         })
 
         viewModel.getCats()
@@ -47,8 +55,18 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
                 true -> Timber.d("Connected")
                 else -> Timber.d("Lost connectivity")
             }
+
+            showConnectivity(it)
             isConnected = it
         })
+
+        catListRetryButton.setOnClickListener{
+            if (isConnected) {
+                viewModel.getCats()
+            } else {
+                showSnackbar("No network connection")
+            }
+        }
     }
 
     override fun onResume() {
@@ -67,5 +85,28 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
         val intent = Intent(this, CatRatingActivity::class.java)
         intent.putExtra("position", position)
         startActivity(intent)
+    }
+
+    fun showSnackbar(message: String) {
+        Snackbar.make(catsListLayout, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun showConnectivity(isConnected: Boolean) {
+        if(isConnected) {
+            emptyStateTextCatList.visibility = GONE
+        } else {
+            emptyStateTextCatList.visibility = VISIBLE
+        }
+    }
+
+    fun showCouldNotLoadData() {
+        emptyStateTextCatList.visibility = VISIBLE
+        emptyStateTextCatList.text = getString(R.string.could_not_load_data)
+        catListRetryButton.visibility = VISIBLE
+    }
+
+    fun showLoadedOnRetry() {
+        emptyStateTextCatList.visibility = GONE
+        catListRetryButton.visibility = GONE
     }
 }
