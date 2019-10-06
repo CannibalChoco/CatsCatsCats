@@ -6,9 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.ConnectivityManager.NetworkCallback
-import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
-
 
 class ConnectionStateMonitor : NetworkCallback() {
 
@@ -16,7 +14,7 @@ class ConnectionStateMonitor : NetworkCallback() {
         NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build()
 
-    var isConnected = MutableLiveData<Boolean>()
+    var isConnected = false
 
     fun register(context: Context) {
         val connectivityManager =
@@ -31,26 +29,12 @@ class ConnectionStateMonitor : NetworkCallback() {
     }
 
     override fun onAvailable(network: Network) {
-        isConnected.postValue(true)
+        isConnected = true
         Timber.d("Connectivity: onAvailable")
     }
 
-    override fun onUnavailable() {
-        isConnected.postValue(false)
-        Timber.d("Connectivity: onUnavailable")
-    }
-
     override fun onLost(network: Network?) {
-        isConnected.postValue(false)
+        isConnected = true
         Timber.d("Connectivity: onLost")
-    }
-
-    companion object {
-        lateinit var INSTANCE: ConnectionStateMonitor
-            private set
-
-        fun createInstance() {
-            INSTANCE = ConnectionStateMonitor()
-        }
     }
 }

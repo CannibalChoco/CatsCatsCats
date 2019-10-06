@@ -21,7 +21,7 @@ class CatRatingActivity : AppCompatActivity() {
     private lateinit var viewModel: CatRatingViewModel
     private lateinit var viewPager: ViewPager
     private lateinit var pagerAdapter: CatImagePagerAdapter
-    private var isConnected = false
+    private lateinit var connectionStateMonitor: ConnectionStateMonitor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,8 @@ class CatRatingActivity : AppCompatActivity() {
         viewPager.adapter = pagerAdapter
         viewPager.currentItem = catPosition
 
+        connectionStateMonitor = ConnectionStateMonitor()
+
         downVote.setOnClickListener {
             tryVote(Vote.Value.VOTE_DOWN.value)
         }
@@ -48,30 +50,20 @@ class CatRatingActivity : AppCompatActivity() {
         viewModel.onVotePosted.observe(this, Observer {
             displayVotedMessage(it)
         })
-
-        ConnectionStateMonitor.INSTANCE.isConnected.observe(this, Observer {
-            when (it) {
-                true -> Timber.d("Connected")
-                else -> Timber.d("Lost connectivity")
-            }
-
-            isConnected = it
-        })
-
     }
 
     override fun onResume() {
         super.onResume()
-        ConnectionStateMonitor.INSTANCE.register(this)
+        connectionStateMonitor.register(this)
     }
 
     override fun onPause() {
         super.onPause()
-        ConnectionStateMonitor.INSTANCE.unregister(this)
+        connectionStateMonitor.unregister(this)
     }
 
     private fun tryVote(vote: Int) {
-        if (isConnected) {
+        if (connectionStateMonitor.isConnected) {
             viewModel.sendVote(viewPager.currentItem, vote)
         } else {
             showSnackbar(catRatingLayout, getString(R.string.not_connected_cant_send_vote))

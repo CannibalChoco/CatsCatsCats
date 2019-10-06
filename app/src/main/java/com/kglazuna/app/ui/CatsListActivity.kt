@@ -22,7 +22,7 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
     private lateinit var viewModel: CatsListViewModel
     private lateinit var layoutManager: GridLayoutManager
     private lateinit var adapter: CatListAdapter
-    var isConnected = false
+    private lateinit var connectionStateMonitor: ConnectionStateMonitor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +36,14 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
         catRecyclerView.layoutManager = layoutManager
         catRecyclerView.adapter = adapter
 
+        connectionStateMonitor = ConnectionStateMonitor()
+
         viewModel.catList.observe(this, Observer { cats ->
             Timber.d("activity got cat list cats")
             adapter.catList = cats
             adapter.notifyDataSetChanged()
 
-            if(cats.isEmpty() && !isConnected) {
+            if(cats.isEmpty() && !connectionStateMonitor.isConnected) {
                 showCouldNotLoadData()
             } else {
                 showLoadedOnRetry()
@@ -50,18 +52,8 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
 
         viewModel.getCats()
 
-        ConnectionStateMonitor.INSTANCE.isConnected.observe(this, Observer {
-            when (it) {
-                true -> Timber.d("Connected")
-                else -> Timber.d("Lost connectivity")
-            }
-
-            showConnectivity(it)
-            isConnected = it
-        })
-
         catListRetryButton.setOnClickListener{
-            if (isConnected) {
+            if (connectionStateMonitor.isConnected) {
                 viewModel.getCats()
             } else {
                 showSnackbar(catsListLayout,"No network connection")
@@ -71,12 +63,12 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
 
     override fun onResume() {
         super.onResume()
-        ConnectionStateMonitor.INSTANCE.register(this)
+        connectionStateMonitor.register(this)
     }
 
     override fun onPause() {
         super.onPause()
-        ConnectionStateMonitor.INSTANCE.unregister(this)
+        connectionStateMonitor.unregister(this)
     }
 
     override fun onCatSelected(position: Int) {
@@ -84,14 +76,6 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
         val intent = Intent(this, CatRatingActivity::class.java)
         intent.putExtra("position", position)
         startActivity(intent)
-    }
-
-    fun showConnectivity(isConnected: Boolean) {
-        if(isConnected) {
-            emptyStateTextCatList.visibility = GONE
-        } else {
-            emptyStateTextCatList.visibility = VISIBLE
-        }
     }
 
     fun showCouldNotLoadData() {
