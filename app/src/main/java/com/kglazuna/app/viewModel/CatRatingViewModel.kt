@@ -28,7 +28,11 @@ class CatRatingViewModel : ViewModel() {
 
         viewModelScope.launch {
             Timber.d("sending vote")
-            CatRepo.sendVote(vote)
+            val response = CatRepo.sendVote(vote)
+            when (response.code()) {
+                200 -> Timber.d("Vote posted")
+                else -> Timber.d("Could not submit vote")
+            }
         }
     }
 }

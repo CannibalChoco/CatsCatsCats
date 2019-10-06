@@ -4,6 +4,8 @@ import com.kglazuna.app.BuildConfig
 import com.kglazuna.app.api.CatApi
 import com.kglazuna.app.model.Cat
 import com.kglazuna.app.model.Vote
+import com.kglazuna.app.model.VoteResponse
+import retrofit2.Response
 import timber.log.Timber
 
 object CatRepo {
@@ -30,7 +32,7 @@ object CatRepo {
         }
     }
 
-    suspend fun sendVote(vote: Vote) {
-        catApi.sendVote(BuildConfig.CAT_API_KEY, vote)
+    suspend fun sendVote(vote: Vote): Response<VoteResponse> {
+        return catApi.sendVote(BuildConfig.CAT_API_KEY, vote)
     }
 }
