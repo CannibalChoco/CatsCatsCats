@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Cats Cats Cats</string>
     <string name="title_activity_cat_rating">Cat Rating</string>
+
+    <!-- Vote messages -->
+    <string name="vote_success">Success! Vote Posted</string>
+    <string name="vote_error">Could not post vote</string>
+
 </resources>

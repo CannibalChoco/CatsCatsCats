@@ -2,6 +2,7 @@ package com.kglazuna.app.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
@@ -36,14 +37,24 @@ class CatRatingActivity : AppCompatActivity() {
 
         downVote.setOnClickListener {
             viewModel.sendVote(viewPager.currentItem, Vote.Value.VOTE_DOWN.value)
-            Snackbar.make(catRatingLayout, "Kitty ${viewPager.currentItem} downvoted :(", Snackbar.LENGTH_SHORT).show()
         }
 
         upVote.setOnClickListener {
             viewModel.sendVote(viewPager.currentItem, Vote.Value.VOTE_UP.value)
-            Snackbar.make(catRatingLayout, "Kitty ${viewPager.currentItem} upvoted :)", Snackbar.LENGTH_SHORT).show()
         }
+
+        viewModel.onVotePosted.observe(this, Observer {
+            displayVotedMessage(it)
+        })
 
     }
 
+    fun displayVotedMessage(votePosted: Boolean) = when(votePosted) {
+        true -> showSnackbar(getString(R.string.vote_success))
+        else -> showSnackbar(getString(R.string.vote_error))
+    }
+
+    fun showSnackbar(message: String) {
+        Snackbar.make(catRatingLayout, message, Snackbar.LENGTH_SHORT).show()
+    }
 }
