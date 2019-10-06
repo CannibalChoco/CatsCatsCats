@@ -9,6 +9,8 @@ import com.kglazuna.app.ConnectionStateMonitor
 import com.kglazuna.app.R
 import com.kglazuna.app.model.Vote
 import com.kglazuna.app.ui.adapter.CatImagePagerAdapter
+import com.kglazuna.app.util.catsRatingViewModel
+import com.kglazuna.app.util.getViewModel
 import com.kglazuna.app.util.showSnackbar
 import com.kglazuna.app.viewModel.CatRatingViewModel
 import kotlinx.android.synthetic.main.activity_cat_rating.*
@@ -28,7 +30,7 @@ class CatRatingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cat_rating)
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this)[CatRatingViewModel::class.java]
+        viewModel = getViewModel(catsRatingViewModel())
         val catPosition = intent.getIntExtra("position", 0)
         Timber.d("cat position: $catPosition")
 

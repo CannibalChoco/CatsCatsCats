@@ -6,11 +6,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kglazuna.app.ConnectionStateMonitor
 import com.kglazuna.app.R
 import com.kglazuna.app.ui.adapter.CatListAdapter
+import com.kglazuna.app.util.catsListViewModel
+import com.kglazuna.app.util.getViewModel
 import com.kglazuna.app.util.showSnackbar
 import com.kglazuna.app.viewModel.CatsListViewModel
 import kotlinx.android.synthetic.main.activity_cats_list.*
@@ -29,7 +30,7 @@ class CatsListActivity : AppCompatActivity(), CatListAdapter.OnCatClickListener 
         setContentView(R.layout.activity_cats_list)
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this)[CatsListViewModel::class.java]
+        viewModel = getViewModel(catsListViewModel())
         layoutManager = GridLayoutManager(this, 2)
         adapter = CatListAdapter(this, emptyList(), this)
 

@@ -8,7 +8,7 @@ import com.kglazuna.app.repository.CatRepo
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class CatsListViewModel : ViewModel() {
+class CatsListViewModel(val catRepo: CatRepo) : ViewModel() {
 
     var catList = MutableLiveData<List<Cat>>()
         private set
@@ -21,7 +21,7 @@ class CatsListViewModel : ViewModel() {
         if (!catList.value.isNullOrEmpty()) return
 
         viewModelScope.launch {
-            catList.value = CatRepo.getCats()
+            catList.value = catRepo.getCats()
             Timber.d("viewModel got cats")
         }
     }

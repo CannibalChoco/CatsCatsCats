@@ -9,7 +9,7 @@ import com.kglazuna.app.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class CatRatingViewModel : ViewModel() {
+class CatRatingViewModel(val catRepo: CatRepo) : ViewModel() {
 
     var catList: List<Cat> = emptyList()
         private set
@@ -17,7 +17,7 @@ class CatRatingViewModel : ViewModel() {
 
     init {
         Timber.d("init viewModel")
-        catList = CatRepo.catList
+        catList = catRepo.catList
     }
 
     fun sendVote(catPosition: Int, value: Int) {
@@ -26,7 +26,7 @@ class CatRatingViewModel : ViewModel() {
 
         viewModelScope.launch {
             Timber.d("sending vote")
-            when (CatRepo.sendVote(vote)) {
+            when (catRepo.sendVote(vote)) {
                 true -> {
                     Timber.d("Vote posted")
                     onVotePosted.value = true
