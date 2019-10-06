@@ -13,11 +13,7 @@ class CatRatingViewModel : ViewModel() {
 
     var catList: List<Cat> = emptyList()
         private set
-
     val onVotePosted = MutableLiveData<Boolean>()
-
-    //    var currentCatPosition: Int = 0
-    var selectedCat: Cat? = null
 
     init {
         Timber.d("init viewModel")
@@ -25,7 +21,6 @@ class CatRatingViewModel : ViewModel() {
     }
 
     fun sendVote(catPosition: Int, value: Int) {
-        val selectedCat = catList[catPosition]
         val cat = catList[catPosition]
         val vote = Vote(cat.id, value)
 
