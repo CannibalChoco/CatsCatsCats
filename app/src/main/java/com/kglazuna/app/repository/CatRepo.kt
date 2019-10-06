@@ -4,8 +4,7 @@ import com.kglazuna.app.BuildConfig
 import com.kglazuna.app.api.CatApi
 import com.kglazuna.app.model.Cat
 import com.kglazuna.app.model.Vote
-import com.kglazuna.app.model.VoteResponse
-import retrofit2.Response
+import retrofit2.HttpException
 import timber.log.Timber
 
 object CatRepo {
@@ -15,24 +14,44 @@ object CatRepo {
         private set
 
     suspend fun getCats() : List<Cat> {
-        val apiResponse = catApi.getCats(BuildConfig.CAT_API_KEY,40)
-        Timber.d("response: $apiResponse")
-        val catList = apiResponse.body()
-        return when (catList) {
-            is List<Cat> -> {
-                Timber.d("got cats: $catList")
-                Timber.d("CatRepo: Cat count: ${catList.size}")
-                this@CatRepo.catList = catList
-                catList
+        return try {
+            val apiResponse = catApi.getCats(BuildConfig.CAT_API_KEY,40)
+            Timber.d("response: $apiResponse")
+            val catList = apiResponse.body()
+            when (catList) {
+                is List<Cat> -> {
+                    Timber.d("got cats: $catList")
+                    Timber.d("CatRepo: Cat count: ${catList.size}")
+                    this@CatRepo.catList = catList
+                    catList
+                }
+                else -> {
+                    Timber.d("got something other than cats")
+                    emptyList()
+                }
             }
-            else -> {
-                Timber.d("got something other than cats")
-                emptyList()
-            }
+        } catch (e: HttpException) {
+            Timber.d(e)
+            emptyList()
+        } catch (t: Throwable) {
+            Timber.d(t)
+            emptyList()
         }
     }
 
-    suspend fun sendVote(vote: Vote): Response<VoteResponse> {
-        return catApi.sendVote(BuildConfig.CAT_API_KEY, vote)
+    suspend fun sendVote(vote: Vote): Boolean {
+        return try {
+            val response = catApi.sendVote(BuildConfig.CAT_API_KEY, vote)
+            when (response.code()) {
+                200 -> true
+                else -> false
+            }
+        } catch (e: HttpException) {
+            Timber.d(e)
+            false
+        } catch (t: Throwable) {
+            Timber.d(t)
+            false
+        }
     }
 }
