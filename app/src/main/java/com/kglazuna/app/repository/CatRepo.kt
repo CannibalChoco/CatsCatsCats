@@ -14,7 +14,7 @@ object CatRepo {
 
     suspend fun getCats() : List<Cat> {
         return try {
-            val apiResponse = catApi.getCats(BuildConfig.CAT_API_KEY,40)
+            val apiResponse = catApi.getCats(BuildConfig.CAT_API_KEY,40, "jpg,png")
             Timber.d("response: $apiResponse")
             val catList = apiResponse.body()
             when (catList) {

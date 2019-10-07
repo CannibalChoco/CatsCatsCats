@@ -16,7 +16,8 @@ interface CatApi {
     @GET("v1/images/search?")
     suspend fun getCats(
         @Query("api_key") apiKey: String,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
+        @Query("mime_types") types: String
     ): Response<List<Cat>>
 
     @POST("v1/votes")
