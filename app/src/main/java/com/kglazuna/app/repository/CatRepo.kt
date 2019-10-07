@@ -4,7 +4,6 @@ import com.kglazuna.app.BuildConfig
 import com.kglazuna.app.api.CatApi
 import com.kglazuna.app.model.Cat
 import com.kglazuna.app.model.Vote
-import retrofit2.HttpException
 import timber.log.Timber
 
 object CatRepo {
